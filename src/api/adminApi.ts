@@ -106,7 +106,9 @@ export interface AiLogsPage {
 // ─── Auth ─────────────────────────────────────────────────
 
 export async function adminLogin(email: string, password: string) {
-  const response = await adminApi.post('/admin/auth/login', { email, password })
+  const response = await axios.post('/api/admin/auth/login', { email, password }, {
+    headers: { 'Content-Type': 'application/json' },
+  })
   return response.data
 }
 
