@@ -15,6 +15,24 @@ const router = createRouter({
       component: () => import('../views/DashboardView.vue'),
       meta: { requiresAuth: true },
     },
+    {
+      path: '/dashboard/memories/today',
+      name: 'today-memories',
+      component: () => import('../views/TodayMemoriesView.vue'),
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/dashboard/memories',
+      name: 'all-memories',
+      component: () => import('../views/AllMemoriesView.vue'),
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/dashboard/records',
+      name: 'all-records',
+      component: () => import('../views/AllRecordsView.vue'),
+      meta: { requiresAuth: true },
+    },
   ],
 })
 

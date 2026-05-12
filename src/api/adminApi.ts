@@ -11,7 +11,7 @@ const adminApi = axios.create({
 adminApi.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('adminAccessToken')
-    if (token) {
+    if (token && !config.url?.includes('/auth/login')) {
       config.headers.Authorization = `Bearer ${token}`
     }
     return config
@@ -197,6 +197,46 @@ export async function replyInquiry(inquiryId: number, content: string) {
 
 export async function updateInquiryStatus(inquiryId: number, status: string) {
   await adminApi.patch(`/admin/inquiries/${inquiryId}/status`, { status })
+}
+
+// ─── Stats List ───────────────────────────────────────────
+
+export interface AdminMemory {
+  memoryId: number
+  userId: number
+  title: string
+  summary: string
+  memoryDate: string
+  emotion: string
+  thumbnailUrl: string | null
+  createdAt: string
+}
+
+export interface AdminRecord {
+  recordId: number
+  userId: number
+  recordType: string
+  textContent: string | null
+  mediaUrl: string | null
+  mediaType: string | null
+  recordDate: string
+  recordedAt: string
+  createdAt: string
+}
+
+export async function fetchTodayMemories(): Promise<AdminMemory[]> {
+  const res = await adminApi.get('/admin/stats/memories/today')
+  return res.data.data || []
+}
+
+export async function fetchAllMemories(): Promise<AdminMemory[]> {
+  const res = await adminApi.get('/admin/stats/memories')
+  return res.data.data || []
+}
+
+export async function fetchAllRecords(): Promise<AdminRecord[]> {
+  const res = await adminApi.get('/admin/stats/records')
+  return res.data.data || []
 }
 
 // ─── Notices ──────────────────────────────────────────────

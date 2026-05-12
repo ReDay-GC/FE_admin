@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { fetchServiceStats, type ServiceStats } from '@/api/adminApi'
 
+const router = useRouter()
 const serviceStats = ref<ServiceStats | null>(null)
 const loading = ref(false)
 
@@ -24,26 +26,29 @@ onMounted(async () => {
 
   <template v-else-if="serviceStats">
     <div class="tri-stats-row">
-      <div class="tri-stat-card">
+      <div class="tri-stat-card clickable" @click="router.push('/dashboard/memories/today')">
         <div class="tri-icon-wrap main">
           <img src="/src/assets/icon-calendar.svg" class="tri-icon" />
         </div>
         <div class="tri-value">{{ serviceStats.todayMemoryCount }}</div>
         <div class="tri-label">오늘 생성 기억</div>
+        <div class="tri-hint">목록 보기 →</div>
       </div>
-      <div class="tri-stat-card">
+      <div class="tri-stat-card clickable" @click="router.push('/dashboard/memories')">
         <div class="tri-icon-wrap sub">
           <img src="/src/assets/icon-folder.svg" class="tri-icon" />
         </div>
         <div class="tri-value">{{ serviceStats.totalMemoryCount }}</div>
         <div class="tri-label">전체 기억</div>
+        <div class="tri-hint">목록 보기 →</div>
       </div>
-      <div class="tri-stat-card">
+      <div class="tri-stat-card clickable" @click="router.push('/dashboard/records')">
         <div class="tri-icon-wrap brown">
           <img src="/src/assets/icon-file.svg" class="tri-icon" />
         </div>
         <div class="tri-value">{{ serviceStats.totalRecordCount }}</div>
         <div class="tri-label">전체 기록</div>
+        <div class="tri-hint">목록 보기 →</div>
       </div>
     </div>
 
@@ -79,6 +84,10 @@ onMounted(async () => {
 
 .tri-stats-row { display: flex; gap: 16px; margin-bottom: 20px; }
 .tri-stat-card { flex: 1; background: #fff; border-radius: 12px; padding: 24px 20px; border: 1px solid #F5F3EE; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+.tri-stat-card.clickable { cursor: pointer; transition: border-color 0.15s, box-shadow 0.15s; }
+.tri-stat-card.clickable:hover { border-color: #E5D4C1; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+.tri-hint { font-size: 11px; color: #C9BEB1; margin-top: auto; }
+.tri-stat-card.clickable:hover .tri-hint { color: #AA7B72; }
 .tri-icon-wrap { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
 .tri-icon { width: 22px; height: 22px; }
 .tri-icon-wrap.main { background: #AA7B72; }
