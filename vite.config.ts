@@ -14,7 +14,7 @@ export default defineConfig({
     open: true,
     proxy: {
       '/api': {
-        target: 'http://43.200.178.95:8080',
+        target: 'http://reday-dev.duckdns.org:8080',
         changeOrigin: true,
       },
     },
