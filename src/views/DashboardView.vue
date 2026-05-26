@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, watch } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import MembersTab from '@/components/tabs/MembersTab.vue'
 import AnalysisTab from '@/components/tabs/AnalysisTab.vue'
 import LogsTab from '@/components/tabs/LogsTab.vue'
@@ -8,8 +8,8 @@ import InquiryTab from '@/components/tabs/InquiryTab.vue'
 import NoticeTab from '@/components/tabs/NoticeTab.vue'
 
 const router = useRouter()
+const route = useRoute()
 
-const currentTab = ref('members')
 const tabs = [
   { id: 'members', label: '전체 회원 관리', icon: '/src/assets/icon-members.svg' },
   { id: 'analysis', label: 'AI 서비스 통계 및 분석', icon: '/src/assets/icon-chart.svg' },
@@ -17,6 +17,22 @@ const tabs = [
   { id: 'inquiry', label: '문의사항 관리', icon: '/src/assets/icon-inquiry.svg' },
   { id: 'notice', label: '공지사항 관리', icon: '/src/assets/icon-notice.svg' },
 ]
+
+const validTabIds = tabs.map(t => t.id)
+
+function resolveTab(tab: unknown): string {
+  return typeof tab === 'string' && validTabIds.includes(tab) ? tab : 'members'
+}
+
+const currentTab = ref(resolveTab(route.query.tab))
+
+watch(() => route.query.tab, (tab) => {
+  currentTab.value = resolveTab(tab)
+})
+
+function selectTab(id: string) {
+  router.replace({ path: '/dashboard', query: { tab: id } })
+}
 
 function logout() {
   localStorage.removeItem('adminAccessToken')
@@ -44,7 +60,7 @@ function logout() {
         :key="tab.id"
         class="tab-btn"
         :class="{ active: currentTab === tab.id }"
-        @click="currentTab = tab.id"
+        @click="selectTab(tab.id)"
       >
         <img :src="tab.icon" class="tab-icon" />
         {{ tab.label }}

@@ -38,7 +38,7 @@ function formatDate(dateStr: string) {
         <span class="brand">Re:Day</span>
         <span class="badge">Admin Console</span>
       </div>
-      <button class="back-btn" @click="router.push('/dashboard')">← 대시보드로</button>
+      <button class="back-btn" @click="router.push({ path: '/dashboard', query: { tab: 'analysis' } })">← 대시보드로</button>
     </header>
 
     <main class="content">
