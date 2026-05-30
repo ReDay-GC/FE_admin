@@ -30,6 +30,12 @@ function statusClass(status: string) {
   return 'badge-fail'
 }
 
+function memoryIdLabel(id: string) {
+  if (id === '인사이트') return '인사이트'
+  if (id?.startsWith('MEM')) return '기억 생성'
+  return id
+}
+
 async function loadPage(page: number) {
   loading.value = true
   try {
@@ -94,7 +100,7 @@ onMounted(() => loadPage(0))
           <tr v-for="log in logs" :key="log.logId">
             <td>{{ formatDateTime(log.processedAt) }}</td>
             <td>
-              <span class="memory-id-badge">{{ log.memoryId }}</span>
+              <span class="memory-id-badge">{{ memoryIdLabel(log.memoryId) }}</span>
             </td>
             <td>
               <div class="log-user">
